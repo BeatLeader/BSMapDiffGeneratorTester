@@ -37,31 +37,56 @@ sw.Stop();
 
 Console.WriteLine($"Time taken: {sw.ElapsedMilliseconds}ms");
 
-File.WriteAllText("diff.json", JsonConvert.SerializeObject(diff, Formatting.Indented));
-File.WriteAllText("newMap.json", JsonConvert.SerializeObject(newMap.Difficulties[0].Data, Formatting.Indented));
-File.WriteAllText("oldMap.json", JsonConvert.SerializeObject(oldMap.Difficulties[0].Data, Formatting.Indented));
+Console.WriteLine($"Changes --- Total: {diff.Count} | Added: {diff.Count(x => x.Type == DiffType.Added)} | Removed: {diff.Count(x => x.Type == DiffType.Removed)} | Modified: {diff.Count(x => x.Type == DiffType.Modified)}");
+
+Console.WriteLine(" ");
 
 diff.Sort((x, y) => x.Object.Beats.CompareTo(y.Object.Beats));
 
 foreach (var entry in diff)
 {
-    switch (entry.Type)
+    if (entry.Object is BeatmapColorGridObject cobj)
     {
-        case (DiffType)0:
-            if (entry.Object is BeatmapGridObject obj) Console.WriteLine($"+ Added    {obj.Beats} at x {obj.x} y {obj.y} (in {entry.CollectionType})");
-            else Console.WriteLine($"+ Added    {entry.Object.Beats} (in {entry.CollectionType})");
-            break;
-        case (DiffType)1:
-            if (entry.Object is BeatmapGridObject obj2) Console.WriteLine($"- Removed  {obj2.Beats} at x {obj2.x} y {obj2.y} (in {entry.CollectionType})");
-            else Console.WriteLine($"- Removed  {entry.Object.Beats} (in {entry.CollectionType})");
-            break;
-        case (DiffType)2:
-            if (entry.Object is BeatmapGridObject obj3) Console.WriteLine($"/ Modified {obj3.Beats} at x {obj3.x} y {obj3.y} (in {entry.CollectionType})");
-            else Console.WriteLine($"/ Modified {entry.Object.Beats} (in {entry.CollectionType})");
-            break;
-        default: break;
+        string color = cobj.Color == 0 ? "Red" : "Blue";
+
+        switch (entry.Type)
+        {
+            case (DiffType)0:
+                Console.WriteLine($"+ Added    {cobj.Beats} at x{cobj.x} y{cobj.y} ({color} in {entry.CollectionType})");
+                break;
+            case (DiffType)1:
+                Console.WriteLine($"- Removed  {cobj.Beats} at x{cobj.x} y{cobj.y} ({color} in {entry.CollectionType})");
+                break;
+            case (DiffType)2:
+                Console.WriteLine($"/ Modified {cobj.Beats} at x{cobj.x} y{cobj.y} ({color} in {entry.CollectionType})");
+                break;
+            default: break;
+        }
+    }
+    else
+    {
+        switch (entry.Type)
+        {
+            case (DiffType)0:
+                if (entry.Object is BeatmapGridObject obj) Console.WriteLine($"+ Added    {obj.Beats} at x {obj.x} y {obj.y} (in {entry.CollectionType})");
+                else Console.WriteLine($"+ Added    {entry.Object.Beats} (in {entry.CollectionType})");
+                break;
+            case (DiffType)1:
+                if (entry.Object is BeatmapGridObject obj2) Console.WriteLine($"- Removed  {obj2.Beats} at x {obj2.x} y {obj2.y} (in {entry.CollectionType})");
+                else Console.WriteLine($"- Removed  {entry.Object.Beats} (in {entry.CollectionType})");
+                break;
+            case (DiffType)2:
+                if (entry.Object is BeatmapGridObject obj3) Console.WriteLine($"/ Modified {obj3.Beats} at x {obj3.x} y {obj3.y} (in {entry.CollectionType})");
+                else Console.WriteLine($"/ Modified {entry.Object.Beats} (in {entry.CollectionType})");
+                break;
+            default: break;
+        }
     }
 }
+
+File.WriteAllText("diff.json", JsonConvert.SerializeObject(diff, Formatting.Indented));
+File.WriteAllText("newMap.json", JsonConvert.SerializeObject(newMap.Difficulties[0].Data, Formatting.Indented));
+File.WriteAllText("oldMap.json", JsonConvert.SerializeObject(oldMap.Difficulties[0].Data, Formatting.Indented));
 
 Console.WriteLine("Meow! Press any key to exit");
 Console.ReadKey();
