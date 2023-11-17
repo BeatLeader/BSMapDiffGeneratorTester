@@ -35,8 +35,6 @@ var diff = MapDiffGenerator.GenerateDifficultyDiff(newMap.Difficulties.First(x =
 
 sw.Stop();
 
-Console.WriteLine(JsonConvert.SerializeObject(diff, Formatting.Indented));
-
 Console.WriteLine($"Time taken: {sw.ElapsedMilliseconds}ms");
 
 File.WriteAllText("diff.json", JsonConvert.SerializeObject(diff, Formatting.Indented));
