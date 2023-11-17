@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BSMapDiffGenerator">
+      <HintPath>..\..\BSMapDiffGenerator\BSMapDiffGenerator\bin\Debug\netstandard2.1\BSMapDiffGenerator.dll</HintPath>
+    </Reference>
+    <Reference Include="NVorbis">
+      <HintPath>..\..\BSMapDiffGenerator\BSMapDiffGenerator\dll\NVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="Parser">
+      <HintPath>..\..\BSMapDiffGenerator\BSMapDiffGenerator\dll\Parser.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
